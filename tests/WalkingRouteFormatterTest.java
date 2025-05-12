@@ -1,4 +1,6 @@
-package homework1;
+package tests;
+
+import homework1.*;
 
 public class WalkingRouteFormatterTest {
 	
