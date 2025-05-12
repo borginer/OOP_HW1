@@ -1,5 +1,8 @@
 package homework1;
 
+import java.lang.IllegalArgumentException;
+import java.lang.Math; 
+
 /**
  * A GeoPoint is a point on the earth. GeoPoints are immutable.
  * <p>
@@ -64,6 +67,8 @@ public class GeoPoint {
 	// and distance computations). Because of this, you should consider 
 	// using ints for your internal representation of GeoPoint. 
 
+	private final int latitude;
+	private final int longitude;
   	
   	// TODO Write abstraction function and representation invariant
   	
@@ -78,7 +83,27 @@ public class GeoPoint {
      *          given in millionths of degrees.
    	 **/
   	public GeoPoint(int latitude, int longitude) {
-  		// TODO Implement this constructor
+		if (latitude > MAX_LATITUDE || latitude < MIN_LATITUDE ||
+			longitude > MAX_LONGITUDE || longitude < MIN_LONGITUDE) {
+				throw new IllegalArgumentException();
+			}
+
+		this.latitude = latitude;
+		this.longitude = longitude;
+  	}
+
+	/**
+  	 * Constructs GeoPoint from another GeoPoint.
+     * @requires gp != null
+   	 * @effects constructs a GeoPoint from another geopoint
+   	 **/
+  	public GeoPoint(GeoPoint gp) {
+		if (gp == null) {
+			throw new IllegalArgumentException();
+		}
+
+		this.latitude = gp.getLatitude();
+		this.longitude = gp.getLongitude();
   	}
 
   	 
@@ -87,7 +112,7 @@ public class GeoPoint {
      * @return the latitude of this in millionths of degrees.
      */
   	public int getLatitude() {
-  		// TODO Implement this method
+		return latitude;
   	}
 
 
@@ -96,9 +121,8 @@ public class GeoPoint {
      * @return the latitude of this in millionths of degrees.
      */
   	public int getLongitude() {
-  		// TODO Implement this method
-  	}
-
+		return longitude;
+	}
 
   	/**
      * Computes the distance between GeoPoints.
@@ -107,8 +131,16 @@ public class GeoPoint {
      *         the Technion approximation.
      **/
   	public double distanceTo(GeoPoint gp) {
-  		// TODO Implement this method
-  	}
+		if (gp == null) {
+			throw new IllegalArgumentException();
+		}
+		double latDiffKilo = (this.latitude - gp.getLatitude()) * 
+			KM_PER_DEGREE_LATITUDE / 1000000;
+		double longDiffKilo = (this.longitude - gp.getLongitude()) * 
+			KM_PER_DEGREE_LONGITUDE / 1000000;
+
+		return Math.sqrt(Math.pow(latDiffKilo, 2) + Math.pow(longDiffKilo, 2));
+	}
 
 
   	/**
@@ -129,8 +161,26 @@ public class GeoPoint {
 		 // degrees and degrees increase in the clockwise direction. By
 		 // mathematical convention, "east" is 0 degrees, and degrees
 		 // increase in the counterclockwise direction. 
+		if (gp == null || this.equals(gp)) {
+			throw new IllegalArgumentException();
+		}
+
+		double latDiffKilo = (gp.getLatitude() - this.latitude) * 
+		 	KM_PER_DEGREE_LATITUDE / 1000000;
+		double longDiffKilo = (gp.getLongitude() - this.longitude) * 
+		 	KM_PER_DEGREE_LONGITUDE / 1000000;
 		 
-  		// TODO Implement this method
+		double theta = Math.atan2(latDiffKilo, longDiffKilo);
+		double degrees = theta * 180 / Math.PI;
+		double compassDegrees;
+
+		if (degrees <= 90) {
+			compassDegrees = 90 - degrees; 
+		} else {
+			compassDegrees = 90 + degrees;
+		}
+
+		return compassDegrees;
   	}
 
 
@@ -140,7 +190,12 @@ public class GeoPoint {
      * 		   gp.latitude = this.latitude && gp.longitude = this.longitude
      **/
   	public boolean equals(Object gp) {
-  		// TODO Implement this method
+		if (gp == null || !(gp instanceof GeoPoint)) {
+			throw new IllegalArgumentException();
+		}
+
+		return this.latitude == ((GeoPoint)gp).getLatitude() && 
+			   this.longitude == ((GeoPoint)gp).getLongitude(); 
   	}
 
 
@@ -161,7 +216,8 @@ public class GeoPoint {
      * @return a string representation of this GeoPoint.
      **/
   	public String toString() {
-  		// TODO Implement this method
+		return new String("(Lat = " + this.latitude / 1000000 
+			+ ", Long = " + this.longitude / 1000000 + ")");
   	}
 
 }

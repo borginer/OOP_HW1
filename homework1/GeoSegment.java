@@ -41,7 +41,10 @@ package homework1;
  **/
 public class GeoSegment  {
 
-	
+	private final String name;
+	private final GeoPoint P1;
+	private final GeoPoint P2;
+	private final double length;
   	// TODO Write abstraction function and representation invariant
 	
 	
@@ -51,9 +54,16 @@ public class GeoSegment  {
      * @effects constructs a new GeoSegment with the specified name and endpoints.
      **/
   	public GeoSegment(String name, GeoPoint p1, GeoPoint p2) {
-  		// TODO Implement this method
-  	}
+		if (name == null || p1 == null || p2 == null) {
+			throw new IllegalArgumentException();
+		}
 
+		this.P1 = new GeoPoint(p1.getLatitude(), p1.getLongitude());
+		this.P2 = new GeoPoint(p2.getLatitude(), p2.getLongitude());
+  		this.name = name;
+		this.length = P1.distanceTo(P2);
+  	}
+	
 
   	/**
      * Returns a new GeoSegment like this one, but with its endpoints reversed.
@@ -61,7 +71,7 @@ public class GeoSegment  {
      *         && gs.p1 = this.p2 && gs.p2 = this.p1
      **/
   	public GeoSegment reverse() {
-  		// TODO Implement this method
+  		return new GeoSegment(name, P2, P1);
   	}
 
 
@@ -70,7 +80,7 @@ public class GeoSegment  {
      * @return the name of this GeoSegment.
      */
   	public String getName() {
-  		// TODO Implement this method
+  		return name;
   	}
 
 
@@ -79,7 +89,7 @@ public class GeoSegment  {
      * @return first endpoint of the segment.
      */
   	public GeoPoint getP1() {
-  		// TODO Implement this method
+  		return new GeoPoint(P1);
   	}
 
 
@@ -88,7 +98,7 @@ public class GeoSegment  {
      * @return second endpoint of the segment.
      */
   	public GeoPoint getP2() {
-  		// TODO Implement this method
+  		return new GeoPoint(P2);
   	}
 
 
@@ -98,8 +108,8 @@ public class GeoSegment  {
      *         Technion approximation.
      */
   	public double getLength() {
-  		// TODO Implement this method
-  	}
+		return length;
+	}
 
 
   	/**
@@ -109,8 +119,11 @@ public class GeoSegment  {
      *         flat-surface, near the Technion approximation.
      **/
   	public double getHeading() {
-  		// TODO Implement this method
-  	}
+		if (length == 0) {
+			throw new IllegalStateException();
+		}
+		return P1.headingTo(P2);
+	}
 
 
   	/**
@@ -119,7 +132,17 @@ public class GeoSegment  {
      *         && gs.name = this.name && gs.p1 = this.p1 && gs.p2 = this.p2
    	 **/
   	public boolean equals(Object gs) {
-  		// TODO Implement this method
+  		if (gs == null || !(gs instanceof GeoSegment)) {
+			return false;
+		}
+
+		if (((GeoSegment)gs).getName() == this.name && 
+			((GeoSegment)gs).getP1().equals(this.P1) && 
+			((GeoSegment)gs).getP2().equals(this.P2)) {
+			return true;
+		}
+
+		return false;
   	}
 
 
@@ -140,7 +163,7 @@ public class GeoSegment  {
      * @return a string representation of this.
      **/
   	public String toString() {
-  		// TODO Implement this method
+  		return new String(", P1=" + P1.toString() + ", P2=" + P2.toString());
   	}
 
 }

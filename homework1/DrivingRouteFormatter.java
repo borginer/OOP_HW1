@@ -50,7 +50,9 @@ public class DrivingRouteFormatter extends RouteFormatter {
      * above.
      **/
   	public String computeLine(GeoFeature geoFeature, double origHeading) {
-  		
+  		DecimalFormat d = new DecimalFormat();
+      d.clone();
+      return new String();
   		// Implementation hint:
 		// You may find the class java.text.DecimalFormat useful when
 		// implementing this method. More info can be found at:

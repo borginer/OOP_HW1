@@ -1,6 +1,7 @@
 package homework1;
 
 import java.util.Iterator;
+import java.util.ArrayList;
 
 /**
  * A GeoFeature represents a route from one location to another along a
@@ -45,9 +46,9 @@ public class GeoFeature {
 	// info can be found at:
 	//   http://docs.oracle.com/javase/8/docs/api/java/util/List.html
 	
+	final ArrayList<GeoSegment> list;
 	
   	// TODO Write abstraction function and representation invariant
-
 	
 	/**
      * Constructs a new GeoFeature.
@@ -60,7 +61,11 @@ public class GeoFeature {
      *          r.end = gs.p2
      **/
   	public GeoFeature(GeoSegment gs) {
-  		// TODO Implement this constructor
+		if (gs == null) {
+			throw new IllegalArgumentException();
+		}
+		list = new ArrayList<GeoSegment>();
+		list.add(new GeoSegment(gs.getName(), gs.getP1(), gs.getP2()));
   	}
   
 
@@ -69,7 +74,7 @@ public class GeoFeature {
       * @return name of geographic feature
       */
   	public String getName() {
-  		// TODO Implement this method
+		return list.getFirst().getName();
   	}
 
 
@@ -78,8 +83,8 @@ public class GeoFeature {
      * @return location of the start of the geographic feature.
      */
   	public GeoPoint getStart() {
-  		// TODO Implement this method
-  	}
+		return new GeoPoint(list.getFirst().getP1());
+	}
 
 
   	/**
@@ -87,8 +92,8 @@ public class GeoFeature {
      * @return location of the end of the geographic feature.
      */
   	public GeoPoint getEnd() {
-  		// TODO Implement this method
-  	}
+		return new GeoPoint(list.getLast().getP2());
+	}
 
 
   	/**
@@ -97,8 +102,8 @@ public class GeoFeature {
      *         geographic feature, in degrees.
      */
   	public double getStartHeading() {
-  		// TODO Implement this method
-  	}
+		return list.getFirst().getHeading();
+	}
 
 
   	/**
@@ -107,8 +112,8 @@ public class GeoFeature {
      *         geographic feature, in degrees.
      */
   	public double getEndHeading() {
-  		// TODO Implement this method
-  	}
+		return list.getLast().getHeading();
+	}
 
 
   	/**
@@ -119,8 +124,14 @@ public class GeoFeature {
      *         values are not necessarily equal.
      */
   	public double getLength() {
-  		// TODO Implement this method
-  	}
+		double length = 0;
+		
+		for (GeoSegment seg: list) {
+			length += seg.getLength();
+		}
+
+		return length;
+	}
 
 
   	/**
@@ -133,8 +144,14 @@ public class GeoFeature {
      *    	   r.length = this.length + gs.length
      **/
   	public GeoFeature addSegment(GeoSegment gs) {
-  		// TODO Implement this method
-  	}
+		if (gs == null || !this.getEnd().equals(gs.getP1()) || 
+			getName() != gs.getName()) {
+			throw new IllegalArgumentException();
+		}
+
+		list.add(gs);
+		return this;
+	}
 
 
   	/**
@@ -156,7 +173,7 @@ public class GeoFeature {
      * @see homework1.GeoSegment
      */
   	public Iterator<GeoSegment> getGeoSegments() {
-  		// TODO Implement this method
+		return list.iterator();
   	}
 
 
@@ -167,7 +184,17 @@ public class GeoFeature {
      *          the same elements in the same order).
      **/
   	public boolean equals(Object o) {
-  		// TODO Implement this method
+		if (o == null || !(o instanceof GeoFeature)) {
+			return false;
+		}
+		Iterator<GeoSegment> o_iter = ((GeoFeature)o).getGeoSegments();
+		ArrayList<GeoSegment> o_list = new ArrayList<>();
+
+		while (o_iter.hasNext()) {
+			o_list.add(o_iter.next());
+		}
+
+		return o_list.equals(this.list);
   	}
 
 
@@ -188,6 +215,13 @@ public class GeoFeature {
    	 * @return a string representation of this.
      **/
   	public String toString() {
-  		// TODO Implement this method
+		StringBuffer s = new StringBuffer(this.getName() + "\n");
+		Iterator<GeoSegment> iter = this.getGeoSegments();
+
+		while (iter.hasNext()) {
+			s.append(iter.next().toString());
+		}	
+
+		return new String(s);
   	}
 }
