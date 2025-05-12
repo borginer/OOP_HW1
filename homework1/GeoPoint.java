@@ -172,15 +172,12 @@ public class GeoPoint {
 		 
 		double theta = Math.atan2(latDiffKilo, longDiffKilo);
 		double degrees = theta * 180 / Math.PI;
-		double compassDegrees;
 
-		if (degrees <= 90) {
-			compassDegrees = 90 - degrees; 
-		} else {
-			compassDegrees = 90 + degrees;
+		if (degrees > 90) { 
+			degrees -= 360; 
 		}
 
-		return compassDegrees;
+		return 90 - degrees;
   	}
 
 

@@ -46,7 +46,7 @@ public class GeoFeature {
 	// info can be found at:
 	//   http://docs.oracle.com/javase/8/docs/api/java/util/List.html
 	
-	final ArrayList<GeoSegment> list;
+	final ArrayList<GeoSegment> segments;
 	
   	// TODO Write abstraction function and representation invariant
 	
@@ -64,8 +64,8 @@ public class GeoFeature {
 		if (gs == null) {
 			throw new IllegalArgumentException();
 		}
-		list = new ArrayList<GeoSegment>();
-		list.add(new GeoSegment(gs.getName(), gs.getP1(), gs.getP2()));
+		segments = new ArrayList<GeoSegment>();
+		segments.add(new GeoSegment(gs.getName(), gs.getP1(), gs.getP2()));
   	}
   
 
@@ -74,7 +74,7 @@ public class GeoFeature {
       * @return name of geographic feature
       */
   	public String getName() {
-		return list.getFirst().getName();
+		return segments.getFirst().getName();
   	}
 
 
@@ -83,7 +83,7 @@ public class GeoFeature {
      * @return location of the start of the geographic feature.
      */
   	public GeoPoint getStart() {
-		return new GeoPoint(list.getFirst().getP1());
+		return new GeoPoint(segments.getFirst().getP1());
 	}
 
 
@@ -92,7 +92,7 @@ public class GeoFeature {
      * @return location of the end of the geographic feature.
      */
   	public GeoPoint getEnd() {
-		return new GeoPoint(list.getLast().getP2());
+		return new GeoPoint(segments.getLast().getP2());
 	}
 
 
@@ -102,7 +102,7 @@ public class GeoFeature {
      *         geographic feature, in degrees.
      */
   	public double getStartHeading() {
-		return list.getFirst().getHeading();
+		return segments.getFirst().getHeading();
 	}
 
 
@@ -112,7 +112,7 @@ public class GeoFeature {
      *         geographic feature, in degrees.
      */
   	public double getEndHeading() {
-		return list.getLast().getHeading();
+		return segments.getLast().getHeading();
 	}
 
 
@@ -126,7 +126,7 @@ public class GeoFeature {
   	public double getLength() {
 		double length = 0;
 		
-		for (GeoSegment seg: list) {
+		for (GeoSegment seg: segments) {
 			length += seg.getLength();
 		}
 
@@ -149,7 +149,7 @@ public class GeoFeature {
 			throw new IllegalArgumentException();
 		}
 
-		list.add(gs);
+		segments.add(gs);
 		return this;
 	}
 
@@ -173,7 +173,7 @@ public class GeoFeature {
      * @see homework1.GeoSegment
      */
   	public Iterator<GeoSegment> getGeoSegments() {
-		return list.iterator();
+		return segments.iterator();
   	}
 
 
@@ -194,7 +194,7 @@ public class GeoFeature {
 			o_list.add(o_iter.next());
 		}
 
-		return o_list.equals(this.list);
+		return o_list.equals(this.segments);
   	}
 
 

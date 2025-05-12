@@ -1,6 +1,7 @@
 package homework1;
 
 import java.util.Iterator;
+import java.util.ArrayList;
 
 /**
  * A Route is a path that traverses arbitrary GeoSegments, regardless
@@ -32,7 +33,7 @@ import java.util.Iterator;
  * </pre>
  **/
 public class Route {
-
+   private ArrayList<GeoFeature> features;
 	
  	// TODO Write abstraction function and representation invariant
 
@@ -47,7 +48,11 @@ public class Route {
      *          r.end = gs.p2
      **/
   	public Route(GeoSegment gs) {
-  		// TODO Implement this constructor
+  		if (gs == null) {
+         throw new IllegalArgumentException();
+      }
+      features = new ArrayList<GeoFeature>();
+      features.add(new GeoFeature(gs));
   	}
 
 
@@ -56,7 +61,7 @@ public class Route {
      * @return location of the start of the route.
      **/
   	public GeoPoint getStart() {
-  		// TODO Implement this method
+  		return features.getLast().getStart();
   	}
 
 
@@ -65,7 +70,7 @@ public class Route {
      * @return location of the end of the route.
      **/
   	public GeoPoint getEnd() {
-  		// TODO Implement this method
+  		return features.getLast().getEnd();
   	}
 
 
@@ -75,7 +80,7 @@ public class Route {
    	 *         route, in degrees.
    	 **/
   	public double getStartHeading() {
-  		// TODO Implement this method
+  		return features.getFirst().getStartHeading();
   	}
 
 
@@ -85,8 +90,8 @@ public class Route {
      *         route, in degrees.
      **/
   	public double getEndHeading() {
-  		// TODO Implement this method
-  	}
+      return features.getLast().getEndHeading();
+   }
 
 
   	/**
@@ -96,7 +101,15 @@ public class Route {
      *         traverse the route. These values are not necessarily equal.
    	 **/
   	public double getLength() {
-  		// TODO Implement this method
+  		Iterator<GeoFeature> iter = features.iterator();
+
+      int length = 0;
+
+      while (iter.hasNext()) {
+         length += iter.next().getLength();
+      }
+
+      return length;
   	}
 
 
@@ -110,8 +123,18 @@ public class Route {
      *         r.length = this.length + gs.length
      **/
   	public Route addSegment(GeoSegment gs) {
-  		// TODO Implement this method
-  	}
+      if (gs == null || !gs.getP1().equals(this.getEnd())) {
+         throw new IllegalArgumentException();
+      }
+      
+      if (features.getLast().getName() == gs.getName()) {
+         features.getLast().addSegment(gs);
+      } else {
+         features.add(new GeoFeature(gs));
+      }
+
+      return this;
+   }
 
 
     /**
@@ -133,7 +156,7 @@ public class Route {
      * @see homework1.GeoFeature
      **/
   	public Iterator<GeoFeature> getGeoFeatures() {
-  		// TODO Implement this method
+  		return features.iterator();
   	}
 
 
@@ -152,7 +175,17 @@ public class Route {
      * @see homework1.GeoSegment
      **/
   	public Iterator<GeoSegment> getGeoSegments() {
-  		// TODO Implement this method
+  		ArrayList<GeoSegment> list = new ArrayList<GeoSegment>();
+
+      Iterator<GeoFeature> this_iter = getGeoFeatures();
+      while (this_iter.hasNext()) {
+         Iterator<GeoSegment> iter = this_iter.next().getGeoSegments();
+         while (iter.hasNext()) {
+            list.add(iter.next());
+         }
+      }
+
+      return list.iterator();
   	}
 
 
@@ -163,7 +196,20 @@ public class Route {
      *          the same elements in the same order).
      **/
   	public boolean equals(Object o) {
-  		// TODO Implement this method
+  		if (o == null || !(o instanceof Route)) {
+         return false;
+      }
+
+      Iterator<GeoFeature> this_iter = features.iterator();
+      Iterator<GeoFeature> o_iter = ((Route)o).getGeoFeatures();
+
+      while (this_iter.hasNext() && o_iter.hasNext()) {
+         if (!this_iter.next().equals(o_iter.next())) {
+            return false;
+         }
+      }
+
+      return true;
   	}
 
 
@@ -184,6 +230,15 @@ public class Route {
      * @return a string representation of this.
      **/
   	public String toString() {
+      StringBuffer s = new StringBuffer();
+
+      Iterator<GeoFeature> iter = this.getGeoFeatures();
+
+      while (iter.hasNext()) {
+         s.append(iter.next().toString() + "\n");
+      }
+
+      return new String(s);
   	}
 
 }

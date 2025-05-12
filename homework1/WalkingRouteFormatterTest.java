@@ -19,7 +19,7 @@ public class WalkingRouteFormatterTest {
 		String directions =
 			"Turn slight right onto Trumpeldor Avenue and walk for 15 minutes.\n" +
     		"Turn left onto Hagalil and walk for 27 minutes.\n";
-    
+		
 		if (mDirections.computeDirections(mShortRoute, 0).equals(directions))
 			System.out.println("Test passed correctly");
 		else

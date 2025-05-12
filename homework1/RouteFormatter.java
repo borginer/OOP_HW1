@@ -1,5 +1,6 @@
 package homework1;
 
+import java.util.Iterator;
 
 /**
  * A RouteFormatter class knows how to create a textual description of
@@ -24,7 +25,16 @@ public abstract class RouteFormatter {
 		// feature in this route and concatenate the results into a single
 		// String.
   		
-  		// TODO Implement this method
+  		StringBuffer s = new StringBuffer();
+      Iterator<GeoFeature> iter = route.getGeoFeatures();
+
+      while (iter.hasNext()) {
+         GeoFeature gf = iter.next();
+         s.append(computeLine(gf, heading));
+         heading = gf.getEndHeading();
+      }
+
+      return new String(s);
   	}
 
 
@@ -61,7 +71,37 @@ public abstract class RouteFormatter {
      * and likewise for left turns.
      */
   	protected String getTurnString(double origHeading, double newHeading) {
-  		// TODO Implement this method
+  		if (origHeading < 0 || origHeading >= 360 || newHeading < 0 || newHeading >= 360) {
+         throw new IllegalArgumentException();
+      }
+      
+      if (origHeading - newHeading > 180) {
+         newHeading += 360;
+      } else if (origHeading - newHeading < -180) {
+         newHeading -= 360;
+      }
+      double angle = origHeading - newHeading;
+      
+      String dir;
+      if (angle < 0 && angle > -180) {
+         dir = new String("right");
+      } else {
+         dir = new String("left");
+      }
+
+      angle = Math.abs(angle);
+
+      if (angle < 10) {
+         return new String("Continue");
+      } else if (angle >= 10 && angle < 60) {
+         return new String("Turn slight " + dir);
+      } else if (angle >= 60 && angle < 120) {
+         return new String("Turn " + dir);
+      } else if (angle >= 120 && angle < 179) {
+         return new String("Turn sharp " + dir);
+      } else {
+         return new String("U-Turn");
+      }
   	}
 
 }

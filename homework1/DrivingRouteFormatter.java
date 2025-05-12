@@ -50,17 +50,21 @@ public class DrivingRouteFormatter extends RouteFormatter {
      * above.
      **/
   	public String computeLine(GeoFeature geoFeature, double origHeading) {
-  		DecimalFormat d = new DecimalFormat();
-      d.clone();
-      return new String();
   		// Implementation hint:
-		// You may find the class java.text.DecimalFormat useful when
-		// implementing this method. More info can be found at:
-  	    // http://docs.oracle.com/javase/tutorial/java/data/numberformat.html
+		  // You may find the class java.text.DecimalFormat useful when
+		  // implementing this method. More info can be found at:
+  	  // http://docs.oracle.com/javase/tutorial/java/data/numberformat.html
   		// and at:
   		// http://docs.oracle.com/javase/8/docs/api/java/text/DecimalFormat.html
-		   		
-  		// TODO Implement this method
+      
+		  DecimalFormat df = new DecimalFormat("#.#");
+      StringBuffer s = new StringBuffer();
+
+      s.append(getTurnString(origHeading, geoFeature.getStartHeading()));
+      double kliometers = geoFeature.getLength();
+      s.append(" onto " + geoFeature.getName() + " and go " + df.format(kliometers) + " kilometers.\n");
+
+      return new String(s);
   	}
 
 }
