@@ -1,8 +1,8 @@
 package homework1;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
 
 /**
  * A JDailog GUI for choosing a GeoSegemnt and adding it to the route shown
@@ -71,8 +71,14 @@ public class GeoSegmentsDialog extends JDialog {
 				if (selected != null) {
 					try { 
 						parent.addSegment(selected);
+						setVisible(false);
 					} catch(IllegalArgumentException ex) {
-						// new segment doesnt start when the last one ends
+						JOptionPane.showMessageDialog(
+						GeoSegmentsDialog.this,
+					"The selected segment does not continue the current route.",
+					  "error",
+						JOptionPane.ERROR_MESSAGE
+						);
 					}
 				}
 				setVisible(false);
