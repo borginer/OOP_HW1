@@ -45,8 +45,16 @@ public class GeoSegment  {
 	private final GeoPoint P1;
 	private final GeoPoint P2;
 	private final double length;
-  	// TODO Write abstraction function and representation invariant
-	
+
+	/*
+	 * Rep. Invariant:
+	 * A geographic line between two valid GeoPoints on earth that has a name and length
+	 * Abstraction Function:
+	 * A geographic line named 'name' that starts at GeoPoint P1 and ends at P2
+	 * with euclidian length
+	 * 
+	 * no need for checkRep() because all the members are private and final.
+	 */
 	
   	/**
      * Constructs a new GeoSegment with the specified name and endpoints.
@@ -114,9 +122,8 @@ public class GeoSegment  {
 
   	/**
   	 * Returns the compass heading from p1 to p2.
-     * @requires this.length != 0
      * @return the compass heading from p1 to p2, in degrees, using the
-     *         flat-surface, near the Technion approximation.
+     *         flat-surface, near the Technion approximation, if p1 == p2, returns 0.
      **/
   	public double getHeading() {
 		if (length == 0) {

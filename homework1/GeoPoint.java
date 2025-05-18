@@ -70,8 +70,17 @@ public class GeoPoint {
 	private final int latitude;
 	private final int longitude;
   	
-  	// TODO Write abstraction function and representation invariant
-  	
+	/*
+	 * Rep. Invariant:
+	 * GeoPoint always represents a valid point on earth, meaning (in degrees):
+	 * -90 <= latitude <= 90
+	 * -180 <= longitude <= 180
+	 * and its not null
+	 * Abstraction Function:
+	 * latitude and longitude map to the real world point (latitude, longitude)
+	 * 
+	 * no need for checkRep() because all the members are private and final.
+	 */
   	
   	/**
   	 * Constructs GeoPoint from a latitude and longitude.

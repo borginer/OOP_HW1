@@ -1,4 +1,7 @@
-package homework1;
+package tests;
+
+import homework1.GeoPoint;
+import homework1.GeoSegment;
 
 /**
  * This class contains two static arrays representing GeoPoints and

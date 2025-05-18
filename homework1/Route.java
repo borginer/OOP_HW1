@@ -35,7 +35,14 @@ import java.util.ArrayList;
 public class Route {
    private ArrayList<GeoFeature> features;
 	
- 	// TODO Write abstraction function and representation invariant
+ 	/*
+    * Rep. Invariant:
+    * A continuous non-linear path devided into sub-paths that share the same name
+    * Abstraction Function:
+    * features represents a list of GeoFeatures, that together combine into one non-linear path
+	 * The end point of each GeoFeature is equal to the beggining of the next one in the list,
+    * and the name is different.
+    */
 
 
   	/**
@@ -123,6 +130,7 @@ public class Route {
      *         r.length = this.length + gs.length
      **/
   	public Route addSegment(GeoSegment gs) {
+      checkRep();
       if (gs == null || !gs.getP1().equals(this.getEnd())) {
          throw new IllegalArgumentException();
       }
@@ -133,6 +141,7 @@ public class Route {
          features.add(new GeoFeature(gs));
       }
 
+      checkRep();
       return this;
    }
 
@@ -240,5 +249,24 @@ public class Route {
 
       return new String(s);
   	}
+
+   private void checkRep() {
+		Iterator<GeoFeature> iter = this.getGeoFeatures(); 
+		GeoFeature last_gf;
+		GeoFeature gf;
+
+		if (iter.hasNext()) {
+			last_gf = iter.next();
+		} else {
+			return;
+		}
+
+		while (iter.hasNext()) {
+			gf = iter.next();
+			assert(last_gf.getEnd().equals(gf.getStart()));
+			assert(last_gf.getName() != gf.getName());
+			last_gf = gf;
+		}
+	}
 
 }
