@@ -1,13 +1,8 @@
 package homework1;
 
-import java.awt.Frame;
-import javax.swing.JDialog;
-import javax.swing.JList;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
-
 
 /**
  * A JDailog GUI for choosing a GeoSegemnt and adding it to the route shown
@@ -53,8 +48,9 @@ public class GeoSegmentsDialog extends JDialog {
 
 		// List of segments
 		DefaultListModel<GeoSegment> model = new DefaultListModel<>();
-		model.addElement(new GeoSegment("Trumpeldor", new GeoPoint(32000, 35000), new GeoPoint(32100, 35100)));
-		model.addElement(new GeoSegment("Hanita", new GeoPoint(32100, 35100), new GeoPoint(32200, 35200)));
+		for (GeoSegment seg: ExampleGeoSegments.segments) {
+			model.addElement(seg);
+		}
 
 		lstSegments = new JList<>(model);
 		JScrollPane scrollPane = new JScrollPane(lstSegments);
@@ -73,7 +69,11 @@ public class GeoSegmentsDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				GeoSegment selected = lstSegments.getSelectedValue();
 				if (selected != null) {
-					parent.addSegment(selected);
+					try { 
+						parent.addSegment(selected);
+					} catch(IllegalArgumentException ex) {
+						// new segment doesnt start when the last one ends
+					}
 				}
 				setVisible(false);
 			}

@@ -222,8 +222,8 @@ public class GeoPoint {
      * @return a string representation of this GeoPoint.
      **/
   	public String toString() {
-		return new String("(Lat = " + this.latitude / 1000000 
-			+ ", Long = " + this.longitude / 1000000 + ")");
+		return String.format("(Lat: %.3f, Long: %.3f)",
+			this.latitude / 1000000.0, this.longitude / 1000000.0);
   	}
 
 }

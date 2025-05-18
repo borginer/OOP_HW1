@@ -170,7 +170,7 @@ public class GeoSegment  {
      * @return a string representation of this.
      **/
   	public String toString() {
-  		return new String(", P1=" + P1.toString() + ", P2=" + P2.toString());
+  		return new String(getName() + ", P1=" + P1.toString() + ", P2=" + P2.toString());
   	}
 
 }
