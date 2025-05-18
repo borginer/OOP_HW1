@@ -68,7 +68,7 @@ public class Route {
      * @return location of the start of the route.
      **/
   	public GeoPoint getStart() {
-  		return features.getLast().getStart();
+  		return features.get(0).getStart();
   	}
 
 
@@ -77,7 +77,7 @@ public class Route {
      * @return location of the end of the route.
      **/
   	public GeoPoint getEnd() {
-  		return features.getLast().getEnd();
+  		return features.get(features.size() - 1).getEnd();
   	}
 
 
