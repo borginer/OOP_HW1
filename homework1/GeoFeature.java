@@ -48,7 +48,14 @@ public class GeoFeature {
 	
 	final ArrayList<GeoSegment> segments;
 	
-  	// TODO Write abstraction function and representation invariant
+	/*
+	 * Rep. Invariant:
+	 * A continuous non-linear segment composed of valid linear segments that share the same name
+	 * Abstraction Function:
+	 * Segments represents a list of GeoSegments with the same name, 
+	 * that together combine into one non-linear path
+	 * The end point of each GeoSegment is equal to the beggining of the next one in the list
+	 */
 	
 	/**
      * Constructs a new GeoFeature.
@@ -144,12 +151,14 @@ public class GeoFeature {
      *    	   r.length = this.length + gs.length
      **/
   	public GeoFeature addSegment(GeoSegment gs) {
+		checkRep();
 		if (gs == null || !this.getEnd().equals(gs.getP1()) || 
 			getName() != gs.getName()) {
 			throw new IllegalArgumentException();
 		}
 
 		segments.add(gs);
+		checkRep();
 		return this;
 	}
 
@@ -224,4 +233,23 @@ public class GeoFeature {
 
 		return new String(s);
   	}
+
+	private void checkRep() {
+		Iterator<GeoSegment> iter = this.getGeoSegments(); 
+		GeoSegment last_gs;
+		GeoSegment gs;
+
+		if (iter.hasNext()) {
+			last_gs = iter.next();
+		} else {
+			return;
+		}
+
+		while (iter.hasNext()) {
+			gs = iter.next();
+			assert(last_gs.getP2().equals(gs.getP1()));
+			assert(last_gs.getName() == gs.getName());
+			last_gs = gs;
+		}
+	}
 }
